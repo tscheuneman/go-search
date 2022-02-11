@@ -1,16 +1,16 @@
-FROM golang:1.12-alpine
+FROM golang:1.17-alpine
 ENV enviorment = ${ENV}
 
-WORKDIR /app/server
+RUN apk update && apk add git
 
-COPY go.mod .
-COPY go.sum .
+COPY ./Webserver/server /app
+WORKDIR /app
 
 RUN go mod download
 
-COPY ./Webserver .
 
-RUN go build -o ./out/search-server .
+RUN go build -o search .
 
-EXPOSE 8080
-CMD ["./out/search-server"]
+
+EXPOSE 80
+CMD ["/app/search"]
