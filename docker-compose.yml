@@ -1,27 +1,26 @@
 version: '3'
 services:
-  base_node:
+  base_go:
     volumes:
-      - /var/www/node_modules
-      - ./Webserver:/var/www
+      - ./Webserver/server:/app
     environment:
       - ENV=DEV
-    container_name: base_node
+    container_name: base_go
     restart: unless-stopped
     build:
       context: ./
-      dockerfile: ./Provisioning/node.dockerfile
+      dockerfile: ./Provisioning/go.dockerfile
     tty: true
-    working_dir: /var/www
+    working_dir: /app
     ports:
-      - "3010:3010"
+      - "8080:8080"
     networks:
       - app-network
 
   # Set up redis - change this name 
-  base_node_cache:
+  base_go_cache:
     image: "redis:alpine"
-    container_name: base_node_cache
+    container_name: base_go_cache
     ports:
       - "6379:6379"
     networks:
