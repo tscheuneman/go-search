@@ -1,0 +1,32 @@
+version: '3'
+services:
+  base_node:
+    volumes:
+      - /var/www/node_modules
+      - ./Webserver:/var/www
+    environment:
+      - ENV=DEV
+    container_name: base_node
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./Provisioning/node.dockerfile
+    tty: true
+    working_dir: /var/www
+    ports:
+      - "3010:3010"
+    networks:
+      - app-network
+
+  # Set up redis - change this name 
+  base_node_cache:
+    image: "redis:alpine"
+    container_name: base_node_cache
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+      driver: bridge

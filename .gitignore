@@ -1,0 +1,10 @@
+.DS_Store
+/Webserver/node_modules
+/Webserver/dist
+/Webserver/.env
+/Webserver/logs/*
+
+node_modules
+logs
+*.log
+.idea
