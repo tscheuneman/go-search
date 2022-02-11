@@ -3,14 +3,13 @@ ENV enviorment = ${ENV}
 
 RUN apk update && apk add git
 
-COPY ./Webserver/server /app
-WORKDIR /app
+COPY ./Webserver/server /app/server
+WORKDIR /app/server
 
 RUN go mod download
 
-
-RUN go build -o search .
-
+RUN go get github.com/githubnemo/CompileDaemon
 
 EXPOSE 80
-CMD ["/app/search"]
+
+ENTRYPOINT CompileDaemon --build="go build -o ../search ." --command="/app/search"

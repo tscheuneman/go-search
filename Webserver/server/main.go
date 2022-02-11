@@ -14,7 +14,7 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world"))
+		w.Write([]byte("hello world2"))
 	})
 
 	http.ListenAndServe(":80", r)

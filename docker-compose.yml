@@ -1,6 +1,8 @@
 version: '3'
 services:
   base_go:
+    volumes:
+      - ./Webserver/server:/app/server
     environment:
       - ENV=DEV
     container_name: base_go
