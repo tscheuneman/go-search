@@ -25,6 +25,17 @@ services:
     networks:
       - app-network
 
+  # Set up search engine
+  meilisearch:
+    image: "getmeili/meilisearch"
+    container_name: meilisearch
+    environment:
+      - MEILI_NO_ANALYTICS=true
+    ports:
+      - "7700:7700"
+    networks:
+      - app-network
+
 networks:
   app-network:
       driver: bridge
