@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	"github.com/tscheuneman/go-search/routes"
 )
 
 func main() {
@@ -13,11 +15,7 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world"))
-	})
-
-	r.Mount("/admin", AdminRoutes{}.Routes())
+	r.Mount("/", routes.MainRouter{}.Routes())
 
 	http.ListenAndServe(":80", r)
 }
