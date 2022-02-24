@@ -14,8 +14,10 @@ func main() {
 	r.Use(middleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world2"))
+		w.Write([]byte("hello world"))
 	})
+
+	r.Mount("/admin", AdminRoutes{}.Routes())
 
 	http.ListenAndServe(":80", r)
 }
