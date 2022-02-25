@@ -13,7 +13,7 @@ import (
 
 func main() {
 	client := meilisearch.NewClient(meilisearch.ClientConfig{
-		Host: "meilisearch:7700",
+		Host: "http://meilisearch:7700",
 	})
 
 	container.SetClient(client)
