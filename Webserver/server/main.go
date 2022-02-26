@@ -25,6 +25,11 @@ func main() {
 	})
 
 	container.SetClient(client)
+
+	initHttp()
+}
+
+func initHttp() {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)

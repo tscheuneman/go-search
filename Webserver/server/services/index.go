@@ -40,6 +40,16 @@ func GetAllIndexes() (resp []*meilisearch.Index, err error) {
 	return indexes, nil
 }
 
+func GetIndex(index_slug string) (resp *meilisearch.Index, err error) {
+	client := container.GetClient()
+	index, err := client.GetIndex(index_slug)
+
+	if err != nil {
+		return nil, err
+	}
+	return index, nil
+}
+
 func DeleteIndex(index_slug string) (resp *meilisearch.Task, err error) {
 	client := container.GetClient()
 

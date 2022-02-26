@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 
 	"github.com/tscheuneman/go-search/services"
@@ -58,6 +59,19 @@ func GetIndexes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.RenderList(w, r, utils.IndexListResponse(indexes))
+}
+
+func GetIndex(w http.ResponseWriter, r *http.Request) {
+	index_id := chi.URLParam(r, "index_slug")
+
+	index, err := services.GetIndex(index_id)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	render.Render(w, r, utils.NewIndexResponse(index))
 }
 
 func DeleteIndex(w http.ResponseWriter, r *http.Request) {
