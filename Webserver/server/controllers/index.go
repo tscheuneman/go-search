@@ -5,9 +5,8 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/meilisearch/meilisearch-go"
 
-	"github.com/tscheuneman/go-search/container"
+	"github.com/tscheuneman/go-search/services"
 	"github.com/tscheuneman/go-search/utils"
 )
 
@@ -38,21 +37,7 @@ func CreateIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := container.GetClient()
-
-	index, _ := client.GetIndex(data.Slug)
-
-	if index != nil {
-		render.Render(w, r, utils.HttpError("Index exists", 409))
-		return
-	}
-
-	config := &meilisearch.IndexConfig{
-		Uid:        data.Slug,
-		PrimaryKey: "id",
-	}
-
-	create, err := client.CreateIndex(config)
+	create, err := services.CreateIndex(data.Slug)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
@@ -64,8 +49,8 @@ func CreateIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetIndexes(w http.ResponseWriter, r *http.Request) {
-	client := container.GetClient()
-	indexes, err := client.GetAllIndexes()
+
+	indexes, err := services.GetAllIndexes()
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
@@ -82,14 +67,13 @@ func DeleteIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := container.GetClient()
-
-	delete, err := client.DeleteIndex(data.Slug)
+	delete, err := services.DeleteIndex(data.Slug)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
 		return
 	}
+
 	render.Status(r, http.StatusCreated)
 	render.Render(w, r, utils.NewTaskResponse(delete))
 }
