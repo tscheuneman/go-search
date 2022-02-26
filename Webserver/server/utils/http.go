@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -25,6 +26,16 @@ func ErrInvalidRequest(err error) render.Renderer {
 		Err:            err,
 		HTTPStatusCode: 400,
 		StatusText:     "Invalid request.",
+		ErrorText:      err.Error(),
+	}
+}
+
+func HttpError(errorText string, status int) render.Renderer {
+	err := errors.New(errorText)
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: status,
+		StatusText:     errorText,
 		ErrorText:      err.Error(),
 	}
 }
