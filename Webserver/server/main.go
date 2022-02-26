@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -12,8 +14,14 @@ import (
 )
 
 func main() {
+	meliUrl := os.Getenv(container.MEILI_URL)
+	if meliUrl == "" {
+		log.Println("Required Env Variables don't exist")
+		os.Exit(1)
+	}
+
 	client := meilisearch.NewClient(meilisearch.ClientConfig{
-		Host: "http://meilisearch:7700",
+		Host: meliUrl,
 	})
 
 	container.SetClient(client)

@@ -6,6 +6,8 @@ import (
 	"github.com/meilisearch/meilisearch-go"
 )
 
+const MEILI_URL = "MEILI_URL"
+
 var dbSingleton sync.Once
 var clientSingleton sync.Once
 
