@@ -40,6 +40,13 @@ func CreateIndex(w http.ResponseWriter, r *http.Request) {
 
 	client := container.GetClient()
 
+	index, _ := client.GetIndex(data.Slug)
+
+	if index != nil {
+		render.Render(w, r, utils.HttpError("Index exists", 409))
+		return
+	}
+
 	config := &meilisearch.IndexConfig{
 		Uid:        data.Slug,
 		PrimaryKey: "id",
