@@ -34,6 +34,24 @@ func GetAllDocuments(index_slug string, limit int64, offset int64) (resp []inter
 	return documents, nil
 }
 
+func GetDocument(index_slug string, document_id string) (resp interface{}, err error) {
+	client := container.GetClient()
+	index, err := client.GetIndex(index_slug)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var document interface{}
+	update_err := index.GetDocument(document_id, &document)
+
+	if update_err != nil {
+		return nil, update_err
+	}
+
+	return document, nil
+}
+
 func PublishDocuments(index_slug string, request []CreateCardRequest) (resp *meilisearch.Task, err error) {
 	client := container.GetClient()
 	index, err := client.GetIndex(index_slug)

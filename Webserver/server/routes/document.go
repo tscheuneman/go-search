@@ -14,5 +14,7 @@ func (rs DocumentRoutes) Routes() chi.Router {
 	r.Post("/", controllers.CreateUpdateDocuments)
 	r.Delete("/{document_id}", controllers.DeleteDocument)
 
+	r.Get("/{document_id}", controllers.GetDocument)
+
 	return r
 }

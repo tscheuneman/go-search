@@ -49,6 +49,20 @@ func GetDocuments(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, documents)
 }
 
+func GetDocument(w http.ResponseWriter, r *http.Request) {
+	index_slug := chi.URLParam(r, "index_slug")
+	document_id := chi.URLParam(r, "document_id")
+
+	document, err := services.GetDocument(index_slug, document_id)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	render.JSON(w, r, document)
+}
+
 func CreateUpdateDocuments(w http.ResponseWriter, r *http.Request) {
 	data := &DocumentCrudRequest{}
 	if err := render.Bind(r, data); err != nil {
