@@ -50,3 +50,20 @@ func PublishDocuments(index_slug string, request []CreateCardRequest) (resp *mei
 
 	return task, nil
 }
+
+func DeleteDocument(index_slug string, document_id string) (resp *meilisearch.Task, err error) {
+	client := container.GetClient()
+	index, err := client.GetIndex(index_slug)
+
+	if err != nil {
+		return nil, err
+	}
+
+	task, update_err := index.DeleteDocument(document_id)
+
+	if update_err != nil {
+		return nil, update_err
+	}
+
+	return task, nil
+}

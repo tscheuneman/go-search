@@ -58,7 +58,7 @@ func CreateUpdateDocuments(w http.ResponseWriter, r *http.Request) {
 
 	index_slug := chi.URLParam(r, "index_slug")
 
-	documents, err := services.PublishDocuments(index_slug, data.Documents)
+	publish_task, err := services.PublishDocuments(index_slug, data.Documents)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
@@ -66,5 +66,20 @@ func CreateUpdateDocuments(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.Status(r, http.StatusCreated)
-	render.Render(w, r, utils.NewTaskResponse(documents))
+	render.Render(w, r, utils.NewTaskResponse(publish_task))
+}
+
+func DeleteDocument(w http.ResponseWriter, r *http.Request) {
+	index_slug := chi.URLParam(r, "index_slug")
+	document_id := chi.URLParam(r, "document_id")
+
+	delete_task, err := services.DeleteDocument(index_slug, document_id)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Render(w, r, utils.NewTaskResponse(delete_task))
 }
