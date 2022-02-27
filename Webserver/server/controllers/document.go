@@ -11,8 +11,6 @@ import (
 	"github.com/tscheuneman/go-search/utils"
 )
 
-type Documentroutes struct{}
-
 type DocumentCrud struct {
 	Slug string `json:"slug"`
 }

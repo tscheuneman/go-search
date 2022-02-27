@@ -1,9 +1,8 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"github.com/tscheuneman/go-search/controllers"
 )
 
 type ConfigurationRoutes struct{}
@@ -11,9 +10,8 @@ type ConfigurationRoutes struct{}
 func (rs ConfigurationRoutes) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world from config"))
-	})
+	r.Post("/globals", controllers.ConfigureGlobals)
+	r.Get("/globals", controllers.GetGlobals)
 
 	return r
 }
