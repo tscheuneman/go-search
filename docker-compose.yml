@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     build:
       context: ./
-      dockerfile: ./Provisioning/go.dockerfile
+      dockerfile: ./Provisioning/go.dev.dockerfile
     tty: true
     ports:
       - "80:80"
