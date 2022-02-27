@@ -18,5 +18,6 @@ func (rs IndexRoutes) Routes() chi.Router {
 	// Sub routes for document actions
 	r.Mount("/{index_slug}/document", DocumentRoutes{}.Routes())
 
+	r.Mount("/{index_slug}/configure", ConfigurationRoutes{}.Routes())
 	return r
 }

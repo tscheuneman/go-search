@@ -18,9 +18,6 @@ func (rs AdminRoutes) Routes() chi.Router {
 	// Sub routes for indexes actions
 	r.Mount("/index", IndexRoutes{}.Routes())
 
-	// Configuration API's
-	r.Mount("/configure", ConfigurationRoutes{}.Routes())
-
 	// Auth
 	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Login Func"))
