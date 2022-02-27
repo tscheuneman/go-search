@@ -18,16 +18,18 @@ type DocumentCrud struct {
 }
 
 type DocumentCrudRequest struct {
-	*DocumentCrud
-
-	ProtectedID string `json:"id"` // override 'id' json to have more control
+	Documents []services.CreateCardRequest `json:"documents,omitempty"`
 }
 
 func (a *DocumentCrudRequest) Bind(r *http.Request) error {
-	if a.DocumentCrud == nil {
-		return errors.New("missing required Document Crud Fields.")
+	for _, val := range a.Documents {
+		if val.Id == nil {
+			return errors.New("All documents must have an ID")
+		}
 	}
-
+	if a.Documents == nil {
+		return errors.New("missing required to create documents")
+	}
 	return nil
 }
 
@@ -35,7 +37,7 @@ func GetDocuments(w http.ResponseWriter, r *http.Request) {
 	index_slug := chi.URLParam(r, "index_slug")
 
 	limit := utils.QueryParamToInt64(r, "limit", 100)
-	offset := utils.QueryParamToInt64(r, "offset", 100)
+	offset := utils.QueryParamToInt64(r, "offset", 0)
 
 	documents, err := services.GetAllDocuments(index_slug, limit, offset)
 
@@ -45,5 +47,24 @@ func GetDocuments(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.JSON(w, r, documents)
+}
 
+func CreateUpdateDocuments(w http.ResponseWriter, r *http.Request) {
+	data := &DocumentCrudRequest{}
+	if err := render.Bind(r, data); err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	index_slug := chi.URLParam(r, "index_slug")
+
+	documents, err := services.PublishDocuments(index_slug, data.Documents)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Render(w, r, utils.NewTaskResponse(documents))
 }

@@ -11,6 +11,7 @@ func (rs DocumentRoutes) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", controllers.GetDocuments)
+	r.Post("/", controllers.CreateUpdateDocuments)
 
 	return r
 }
