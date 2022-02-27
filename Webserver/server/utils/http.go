@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/render"
 )
@@ -38,4 +39,13 @@ func HttpError(errorText string, status int) render.Renderer {
 		StatusText:     errorText,
 		ErrorText:      err.Error(),
 	}
+}
+
+func QueryParamToInt64(req *http.Request, name string, default_val int64) int64 {
+	param := req.URL.Query().Get(name)
+	result, err := strconv.ParseInt(param, 10, 64)
+	if err != nil {
+		return default_val
+	}
+	return result
 }

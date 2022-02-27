@@ -17,8 +17,7 @@ func (rs AdminRoutes) Routes() chi.Router {
 
 	// Sub routes for indexes actions
 	r.Mount("/index", IndexRoutes{}.Routes())
-	// Sub routes for document actions
-	r.Mount("/document", DocumentRoutes{}.Routes())
+
 	// Configuration API's
 	r.Mount("/configure", ConfigurationRoutes{}.Routes())
 

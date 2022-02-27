@@ -1,9 +1,8 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"github.com/tscheuneman/go-search/controllers"
 )
 
 type DocumentRoutes struct{}
@@ -11,9 +10,7 @@ type DocumentRoutes struct{}
 func (rs DocumentRoutes) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world from document"))
-	})
+	r.Get("/", controllers.GetDocuments)
 
 	return r
 }
