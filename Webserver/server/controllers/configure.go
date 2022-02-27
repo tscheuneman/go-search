@@ -27,14 +27,14 @@ func ConfigureGlobals(w http.ResponseWriter, r *http.Request) {
 
 	index_slug := chi.URLParam(r, "index_slug")
 
-	documents, err := services.SetGlobalConfig(index_slug, data.Config)
+	task, err := services.SetGlobalConfig(index_slug, data.Config)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
 		return
 	}
 
-	render.JSON(w, r, documents)
+	render.JSON(w, r, task)
 }
 
 func GetGlobals(w http.ResponseWriter, r *http.Request) {
