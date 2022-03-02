@@ -6,21 +6,29 @@ services:
     environment:
       - ENV=DEV
       - MEILI_URL=http://meilisearch:7700
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=go-search
     container_name: base_go
     restart: unless-stopped
     build:
       context: ./
       dockerfile: ./Provisioning/go.dev.dockerfile
     tty: true
+    depends_on:
+      - "redis"
+      - "meilisearch"
+      - "postgres"
     ports:
       - "80:80"
     networks:
       - app-network
 
   # Set up redis - change this name 
-  base_go_cache:
+  redis:
     image: "redis:alpine"
-    container_name: base_go_cache
+    container_name: redis
     ports:
       - "6379:6379"
     networks:
@@ -37,6 +45,22 @@ services:
     networks:
       - app-network
 
+  # Set up DB
+  postgres:
+    image: "postgres:14.1-alpine"
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes: 
+      - db:/var/lib/postgresql/data
 networks:
   app-network:
       driver: bridge
+volumes:
+  db:
+    driver: local
