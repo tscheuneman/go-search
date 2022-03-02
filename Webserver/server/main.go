@@ -1,12 +1,14 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/meilisearch/meilisearch-go"
 	"github.com/tscheuneman/go-search/container"
@@ -15,17 +17,31 @@ import (
 
 func main() {
 	meliUrl := os.Getenv(container.MEILI_URL)
-	if meliUrl == "" {
-		log.Println("Required Env Variables don't exist")
-		os.Exit(1)
+	dbHost := os.Getenv(container.DB_HOST)
+	dbUser := os.Getenv(container.DB_USER)
+	dbPw := os.Getenv(container.DB_PASSWORD)
+
+	if meliUrl == "" || dbHost == "" || dbUser == "" || dbPw == "" {
+		panic("Required Env Variables don't exist")
 	}
 
 	client := meilisearch.NewClient(meilisearch.ClientConfig{
 		Host: meliUrl,
 	})
 
+	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPw
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		fmt.Println("Couldn't initalize DB")
+		panic(err)
+	}
+
+	container.SetDb(db)
 	container.SetClient(client)
 
+	fmt.Println("Initializing HTTP Server")
 	initHttp()
 }
 

@@ -4,21 +4,30 @@ import (
 	"sync"
 
 	"github.com/meilisearch/meilisearch-go"
+	"gorm.io/gorm"
 )
 
 const MEILI_URL = "MEILI_URL"
+
+// DB
+const DB_HOST = "DB_HOST"
+const DB_USER = "DB_USER"
+const DB_PASSWORD = "DB_PASSWORD"
 
 var dbSingleton sync.Once
 var clientSingleton sync.Once
 
 var clientConnection *meilisearch.Client
+var dbConnection *gorm.DB
 
-func SetDb() {
-
+func SetDb(dbCon *gorm.DB) {
+	dbSingleton.Do(func() {
+		dbConnection = dbCon
+	})
 }
 
-func GetDb() {
-
+func GetDb() *gorm.DB {
+	return dbConnection
 }
 
 func SetClient(clientCon *meilisearch.Client) {
