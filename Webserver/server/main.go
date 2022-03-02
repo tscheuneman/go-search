@@ -12,6 +12,7 @@ import (
 
 	"github.com/meilisearch/meilisearch-go"
 	"github.com/tscheuneman/go-search/container"
+	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/routes"
 )
 
@@ -31,15 +32,17 @@ func main() {
 
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPw
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dbConn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println("Couldn't initalize DB")
 		panic(err)
 	}
 
-	container.SetDb(db)
+	container.SetDb(dbConn)
 	container.SetClient(client)
+
+	dbConn.AutoMigrate(&data.User{})
 
 	fmt.Println("Initializing HTTP Server")
 	initHttp()
