@@ -42,8 +42,8 @@ func main() {
 	container.SetDb(dbConn)
 	container.SetClient(client)
 
-	// DB Migrations should probably live somewhere else.  This is fine for not though
-	dbConn.AutoMigrate(&data.User{})
+	// DB Migrations should probably live somewhere else.  This is fine for now though
+	dbConn.AutoMigrate(&data.User{}, &data.SearchEndpoint{})
 
 	fmt.Println("Initializing HTTP Server")
 	initHttp()
