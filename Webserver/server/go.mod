@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	ariga.io/atlas v0.3.2-0.20220120225051-c3fac7d636dd // indirect
-	entgo.io/ent v0.10.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect

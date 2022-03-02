@@ -13,5 +13,7 @@ func (rs ConfigurationRoutes) Routes() chi.Router {
 	r.Post("/globals", controllers.ConfigureGlobals)
 	r.Get("/globals", controllers.GetGlobals)
 
+	r.Post("/search", controllers.ConfigureGlobals)
+
 	return r
 }
