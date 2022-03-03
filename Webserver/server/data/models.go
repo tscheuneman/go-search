@@ -19,6 +19,7 @@ type SearchEndpoint struct {
 	gorm.Model
 	Id                string `gorm:"primaryKey"`
 	Slug              string
+	Index             string
 	DisplayFields     []string `gorm:"type:text[]"`
 	HighlightFields   []string `gorm:"type:text[]"`
 	AllowedSortFields []string `gorm:"type:text[]"`

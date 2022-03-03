@@ -14,20 +14,29 @@ type ConfigureSearchRequest struct {
 	AllowedFacets     *[]string `json:"allowed_facets,omitempty"`
 }
 
-func ConfigureSearch(index_slug string, search ConfigureSearchRequest) (resl bool) {
+func ConfigureSearch(index_slug string, search ConfigureSearchRequest) (res bool) {
 	dbConn := container.GetDb()
 	searchEndpoint := data.SearchEndpoint{
 		Slug:              search.Slug,
+		Index:             index_slug,
 		DisplayFields:     *search.DisplayFields,
 		HighlightFields:   *search.AllowedSortFields,
 		AllowedSortFields: *search.AllowedSortFields,
 		AllowedFacets:     *search.AllowedFacets,
 	}
 	if search.Id != nil {
-		dbConn.Create(searchEndpoint)
+		dbConn.Create(&searchEndpoint)
 	} else {
-		dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(searchEndpoint)
+		dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&searchEndpoint)
 	}
 
 	return true
+}
+
+func GetSearches(index_slug string) (res interface{}) {
+	dbConn := container.GetDb()
+
+	searches := dbConn.Where("index = ?", index_slug).Find(&data.SearchEndpoint{})
+
+	return searches
 }
