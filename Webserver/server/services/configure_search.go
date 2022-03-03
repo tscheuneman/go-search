@@ -1,6 +1,12 @@
 package services
 
+import (
+	"github.com/tscheuneman/go-search/container"
+	"github.com/tscheuneman/go-search/data"
+)
+
 type ConfigureSearchRequest struct {
+	Id                *string   `json:"id,omitempty"`
 	Slug              string    `json:"slug,omitempty"`
 	DisplayFields     *[]string `json:"display_fields,omitempty"`
 	HighlightFields   *[]string `json:"highlight_fields,omitempty"`
@@ -8,7 +14,20 @@ type ConfigureSearchRequest struct {
 	AllowedFacets     *[]string `json:"allowed_facets,omitempty"`
 }
 
-func ConfigureSearch(index_slug string, data ConfigureSearchRequest) (resp interface{}, err error) {
+func ConfigureSearch(index_slug string, search ConfigureSearchRequest) (resl bool) {
+	dbConn := container.GetDb()
+	searchEndpoint := data.SearchEndpoint{
+		Slug:              search.Slug,
+		DisplayFields:     *search.DisplayFields,
+		HighlightFields:   *search.AllowedSortFields,
+		AllowedSortFields: *search.AllowedSortFields,
+		AllowedFacets:     *search.AllowedFacets,
+	}
+	if search.Id != nil {
+		dbConn.Create(searchEndpoint)
+	} else {
+		dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(searchEndpoint)
+	}
 
-	return nil, nil
+	return true
 }
