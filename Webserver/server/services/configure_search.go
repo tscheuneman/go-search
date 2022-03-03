@@ -8,7 +8,7 @@ type ConfigureSearchRequest struct {
 	AllowedFacets     *[]string `json:"allowed_facets,omitempty"`
 }
 
-func ConfigureSearch(index_slug string) (resp interface{}, err error) {
+func ConfigureSearch(index_slug string, data ConfigureSearchRequest) (resp interface{}, err error) {
 
 	return nil, nil
 }
