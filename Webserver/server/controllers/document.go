@@ -16,12 +16,12 @@ type DocumentCrud struct {
 }
 
 type DocumentCrudRequest struct {
-	Documents []services.CreateCardRequest `json:"documents,omitempty"`
+	Documents []map[string]interface{} `json:"documents,omitempty"`
 }
 
 func (a *DocumentCrudRequest) Bind(r *http.Request) error {
 	for _, val := range a.Documents {
-		if val.Id == nil {
+		if val["id"] == nil {
 			return errors.New("All documents must have an ID")
 		}
 	}

@@ -5,11 +5,6 @@ import (
 	"github.com/tscheuneman/go-search/container"
 )
 
-type CreateCardRequest struct {
-	Id     *string     `json:"id,omitempty"`
-	Fields interface{} `json:"fields"`
-}
-
 func GetAllDocuments(index_slug string, limit int64, offset int64) (resp []interface{}, err error) {
 	client := container.GetClient()
 	index, err := client.GetIndex(index_slug)
@@ -52,7 +47,7 @@ func GetDocument(index_slug string, document_id string) (resp interface{}, err e
 	return document, nil
 }
 
-func PublishDocuments(index_slug string, request []CreateCardRequest) (resp *meilisearch.Task, err error) {
+func PublishDocuments(index_slug string, request []map[string]interface{}) (resp *meilisearch.Task, err error) {
 	client := container.GetClient()
 	index, err := client.GetIndex(index_slug)
 
