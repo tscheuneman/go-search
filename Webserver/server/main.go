@@ -14,6 +14,7 @@ import (
 	"github.com/tscheuneman/go-search/container"
 	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/routes"
+	"github.com/tscheuneman/go-search/utils"
 )
 
 func main() {
@@ -54,6 +55,7 @@ func initHttp() {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(utils.SetResponseHeaders)
 
 	r.Mount("/", routes.MainRouter{}.Routes())
 

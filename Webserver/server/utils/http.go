@@ -49,3 +49,11 @@ func QueryParamToInt64(req *http.Request, name string, default_val int64) int64 
 	}
 	return result
 }
+
+func SetResponseHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		rw.Header().Set("Access-Control-Allow-Origin", "*")
+
+		next.ServeHTTP(rw, r)
+	})
+}
