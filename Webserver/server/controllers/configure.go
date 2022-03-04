@@ -75,3 +75,20 @@ func ConfigureSearch(w http.ResponseWriter, r *http.Request) {
 
 	render.JSON(w, r, createEntry)
 }
+
+func GetSearches(w http.ResponseWriter, r *http.Request) {
+	index_slug := chi.URLParam(r, "index_slug")
+
+	searches := services.GetSearches(index_slug)
+
+	render.JSON(w, r, searches)
+}
+
+func GetSearch(w http.ResponseWriter, r *http.Request) {
+	index_slug := chi.URLParam(r, "index_slug")
+	search_slug := chi.URLParam(r, "search_slug")
+
+	search := services.GetSearch(index_slug, search_slug)
+
+	render.JSON(w, r, search)
+}

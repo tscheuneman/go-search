@@ -40,3 +40,11 @@ func GetSearches(index_slug string) (res interface{}) {
 
 	return searches
 }
+
+func GetSearch(index_slug string, search_slug string) (res interface{}) {
+	dbConn := container.GetDb()
+
+	search := dbConn.Where("index = ? AND slug = ?", index_slug, search_slug).Find(&data.SearchEndpoint{})
+
+	return search
+}
