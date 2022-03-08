@@ -66,7 +66,7 @@ func ConfigureSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createEntry := services.ConfigureSearch(index_slug, data.Search)
+	createEntry := services.CreateSearchEndpoint(index_slug, data.Search)
 
 	render.JSON(w, r, createEntry)
 }

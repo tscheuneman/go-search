@@ -17,15 +17,14 @@ type User struct {
 
 type SearchEndpoint struct {
 	gorm.Model
-	Id                string `gorm:"primaryKey"`
-	Slug              string
-	Index             string
-	DisplayFields     []string `gorm:"type:text[]"`
-	HighlightFields   []string `gorm:"type:text[]"`
-	AllowedSortFields []string `gorm:"type:text[]"`
-	AllowedFacets     []string `gorm:"type:text[]"`
-	CreatedAt         time.Time
-	UpdatedAt         time.Time
+	Id              string `gorm:"primaryKey"`
+	Slug            string
+	Index           string
+	DisplayFields   []string `gorm:"type:text[]"`
+	HighlightFields []string `gorm:"type:text[]"`
+	AllowedFacets   []string `gorm:"type:text[]"`
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {

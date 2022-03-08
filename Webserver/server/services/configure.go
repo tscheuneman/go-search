@@ -12,8 +12,6 @@ type ConfigureGlobals struct {
 	SearchableFields *[]string `json:"searchable_fields,omitempty"`
 	FilterableFields *[]string `json:"filterable_fields,omitempty"`
 	SortableFields   *[]string `json:"sortable_fields,omitempty"`
-	StopWords        *[]string `json:"stop_words,omitempty"`
-	RankingOrder     *[]string `json:"ranking_order,omitempty"`
 }
 
 func SetGlobalConfig(index_slug string, data ConfigureGlobals) (resp *meilisearch.Task, err error) {
@@ -30,19 +28,13 @@ func SetGlobalConfig(index_slug string, data ConfigureGlobals) (resp *meilisearc
 		setting_config.DisplayedAttributes = *data.DisplayedFields
 	}
 	if data.SearchableFields != nil {
-		setting_config.DisplayedAttributes = *data.SearchableFields
+		setting_config.SearchableAttributes = *data.SearchableFields
 	}
 	if data.FilterableFields != nil {
 		setting_config.FilterableAttributes = *data.FilterableFields
 	}
-	if data.SearchableFields != nil {
-		setting_config.SearchableAttributes = *data.SearchableFields
-	}
-	if data.StopWords != nil {
-		setting_config.StopWords = *data.StopWords
-	}
-	if data.RankingOrder != nil {
-		setting_config.RankingRules = *data.RankingOrder
+	if data.SortableFields != nil {
+		setting_config.SortableAttributes = *data.SortableFields
 	}
 
 	fmt.Println(setting_config)
