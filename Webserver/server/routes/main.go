@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -17,7 +16,6 @@ func (rs MainRouter) Routes() chi.Router {
 
 	workDir, _ := os.Getwd()
 	filesDir := http.Dir(filepath.Join(workDir, "../", "client"))
-	fmt.Println(filesDir)
 
 	FileServer(r, "/", filesDir)
 
