@@ -66,7 +66,11 @@ func ConfigureSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createEntry := services.CreateSearchEndpoint(index_slug, data.Search)
+	createEntry, err := services.CreateSearchEndpoint(index_slug, data.Search)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+	}
 
 	render.JSON(w, r, createEntry)
 }

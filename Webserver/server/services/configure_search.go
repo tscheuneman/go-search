@@ -3,6 +3,8 @@ package services
 import (
 	"github.com/tscheuneman/go-search/container"
 	"github.com/tscheuneman/go-search/data"
+	"github.com/tscheuneman/go-search/utils"
+	"gorm.io/gorm"
 )
 
 type ConfigureSearchRequest struct {
@@ -14,7 +16,7 @@ type ConfigureSearchRequest struct {
 	AllowedFacets     *[]string `json:"allowed_facets,omitempty"`
 }
 
-func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res bool) {
+func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res *utils.Status, err error) {
 	dbConn := container.GetDb()
 	searchEndpoint := data.SearchEndpoint{
 		Slug:            search.Slug,
@@ -23,27 +25,43 @@ func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res
 		HighlightFields: *search.HighlightFields,
 		AllowedFacets:   *search.AllowedFacets,
 	}
-	if search.Id != nil {
-		dbConn.Create(&searchEndpoint)
+
+	var result *gorm.DB
+
+	if search.Id == nil {
+		result = dbConn.Model(&data.SearchEndpoint{}).Create(&searchEndpoint)
 	} else {
-		dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&searchEndpoint)
+		result = dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&searchEndpoint)
 	}
 
-	return true
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	response := &utils.Status{
+		Status:  200,
+		Message: "Created Search Index",
+	}
+
+	return response, nil
 }
 
 func GetSearches(index_slug string) (res interface{}) {
 	dbConn := container.GetDb()
 
-	searches := dbConn.Where("index = ?", index_slug).Find(&data.SearchEndpoint{})
+	results := map[string]interface{}{}
 
-	return searches
+	dbConn.Model(&data.SearchEndpoint{}).Where("index = ?", index_slug).Find(results)
+
+	return results
 }
 
 func GetSearch(index_slug string, search_slug string) (res interface{}) {
 	dbConn := container.GetDb()
 
-	search := dbConn.Where("index = ? AND slug = ?", index_slug, search_slug).Find(&data.SearchEndpoint{})
+	result := map[string]interface{}{}
 
-	return search
+	dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(result)
+
+	return result
 }
