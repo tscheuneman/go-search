@@ -66,12 +66,12 @@ func GetSearches(index_slug string) (res *[]data.SearchEndpoint, err error) {
 	return results, nil
 }
 
-func GetSearch(index_slug string, search_slug string) (res *data.SearchEndpoint, err error) {
+func GetSearch(search_slug string) (res *data.SearchEndpoint, err error) {
 	dbConn := container.GetDb()
 
 	var result *data.SearchEndpoint
 
-	dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(&result)
+	dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("slug = ?", search_slug).Find(&result)
 
 	if dbResult.Error != nil {
 		return nil, dbResult.Error

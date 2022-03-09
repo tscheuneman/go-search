@@ -16,6 +16,7 @@ func (rs MainRouter) Routes() chi.Router {
 	})
 
 	r.Mount("/admin", AdminRoutes{}.Routes())
+	r.Mount("/search", SearchRoutes{}.Routes())
 
 	return r
 }

@@ -88,10 +88,9 @@ func GetSearches(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSearch(w http.ResponseWriter, r *http.Request) {
-	index_slug := chi.URLParam(r, "index_slug")
 	search_slug := chi.URLParam(r, "search_slug")
 
-	search, err := services.GetSearch(index_slug, search_slug)
+	search, err := services.GetSearch(search_slug)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
