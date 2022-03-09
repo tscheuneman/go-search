@@ -4,6 +4,8 @@ ENV enviorment = ${ENV}
 RUN apk update && apk add git
 
 COPY ./Webserver/server /app/server
+COPY ./Webserver/client/build /app/client
+
 WORKDIR /app/server
 
 RUN go mod download
