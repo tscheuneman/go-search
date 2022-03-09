@@ -49,9 +49,9 @@ func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res
 func GetSearches(index_slug string) (res interface{}) {
 	dbConn := container.GetDb()
 
-	results := map[string]interface{}{}
+	var results []data.SearchEndpoint
 
-	dbConn.Model(&data.SearchEndpoint{}).Where("index = ?", index_slug).Find(results)
+	dbConn.Model(&data.SearchEndpoint{}).Where("index = ?", index_slug).Find(&results)
 
 	return results
 }
@@ -59,9 +59,9 @@ func GetSearches(index_slug string) (res interface{}) {
 func GetSearch(index_slug string, search_slug string) (res interface{}) {
 	dbConn := container.GetDb()
 
-	result := map[string]interface{}{}
+	var result data.SearchEndpoint
 
-	dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(result)
+	dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(&result)
 
 	return result
 }
