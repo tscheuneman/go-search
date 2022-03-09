@@ -18,7 +18,7 @@ type User struct {
 type SearchEndpoint struct {
 	gorm.Model
 	Id              string `gorm:"primaryKey"`
-	Slug            string
+	Slug            string `gorm:"uniqueIndex"`
 	Index           string
 	DisplayFields   []string `gorm:"type:text[]"`
 	HighlightFields []string `gorm:"type:text[]"`
