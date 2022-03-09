@@ -17,7 +17,7 @@ function Home(): React.ReactElement {
     const [indexes, setIndexes] = useState<Index[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost/admin/index').then(res => res.json()).then(response => {
+        fetch('/admin/index').then(res => res.json()).then(response => {
             setIndexes(response);
         }).catch(err => console.error(err));
     }, []);

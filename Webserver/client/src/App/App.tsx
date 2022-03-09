@@ -28,7 +28,7 @@ function App() {
         </Box>
         <Container>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="" element={<Home />} />
             <Route path="/index/:id" element={<Index />} />
             <Route path="/index/:id/search/:search_slug" element={<Searches />} />
           </Routes>

@@ -23,7 +23,7 @@ function Index(): React.ReactElement {
 
     const { id: indexId } = useParams();
     useEffect(() => {
-        fetch(`http://localhost/admin/index/${indexId}/configure/globals`).then(res => res.json()).then(response => {
+        fetch(`/admin/index/${indexId}/configure/globals`).then(res => res.json()).then(response => {
             const searchableResponse: string[] = response[ConfigValues.SEARCH_CONFIG] || ["*"];
             const displayResponse: string[] = response[ConfigValues.DISPLAY_CONFIG] || ["*"];
             const filterableResponse: string[] = response[ConfigValues.FILTERABLE_CONFIG] || [];
@@ -36,7 +36,7 @@ function Index(): React.ReactElement {
 
         }).catch(err => console.error(err));
 
-        fetch(`http://localhost/admin/index/${indexId}/configure/search`).then(res => res.json()).then(response => {
+        fetch(`/admin/index/${indexId}/configure/search`).then(res => res.json()).then(response => {
             setSearches(response || [])
             }).catch(err => console.error(err));
     }, []);
@@ -56,7 +56,7 @@ function Index(): React.ReactElement {
             }
         };
 
-        fetch(`http://localhost/admin/index/${indexId}/configure/globals`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
+        fetch(`/admin/index/${indexId}/configure/globals`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
             'Content-Type': 'application/json'
         } }).then(res => res.json()).then(response => {
         }).catch(err => console.error(err));

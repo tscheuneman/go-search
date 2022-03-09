@@ -24,7 +24,7 @@ function Searches(): React.ReactElement {
 
 
     useEffect(() => {
-        fetch(`http://localhost/admin/index/${indexId}/configure/search/${searchSlug}`).then(res => res.json()).then(response => {
+        fetch(`/admin/index/${indexId}/configure/search/${searchSlug}`).then(res => res.json()).then(response => {
             const facetResponse: string[] = response[FieldConfigValues.FACET_CONFIG] || [];
             const displayResponse: string[] = response[FieldConfigValues.DISPLAY_CONFIG] || [];
             const highlightResponse: string[] = response[FieldConfigValues.HIGHLIGHT_CONFIG] || [];
@@ -52,7 +52,7 @@ function Searches(): React.ReactElement {
                 allowed_facets: allowedFacets,
             }
         };
-        fetch(`http://localhost/admin/index/${indexId}/configure/search`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
+        fetch(`/admin/index/${indexId}/configure/search`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
             'Content-Type': 'application/json'
         } }).then(res => res.json()).then(response => {
         }).catch(err => console.error(err));
