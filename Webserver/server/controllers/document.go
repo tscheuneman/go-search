@@ -34,7 +34,7 @@ func (a *DocumentCrudRequest) Bind(r *http.Request) error {
 func GetDocuments(w http.ResponseWriter, r *http.Request) {
 	index_slug := chi.URLParam(r, "index_slug")
 
-	limit := utils.QueryParamToInt64(r, "limit", 20)
+	limit := utils.QueryParamToInt64(r, "limit", 100)
 	offset := utils.QueryParamToInt64(r, "offset", 0)
 
 	documents, err := services.GetAllDocuments(index_slug, limit, offset)
