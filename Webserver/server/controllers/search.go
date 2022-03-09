@@ -24,7 +24,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	search_results, err := services.Search(query, search)
+	search_results, err := services.Search(query, search, limit, offset)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
