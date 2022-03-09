@@ -1,6 +1,9 @@
 package services
 
 import (
+	"fmt"
+
+	"github.com/lib/pq"
 	"github.com/tscheuneman/go-search/container"
 	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/utils"
@@ -8,33 +11,36 @@ import (
 )
 
 type ConfigureSearchRequest struct {
-	Id                *string   `json:"id,omitempty"`
-	Slug              string    `json:"slug,omitempty"`
-	DisplayFields     *[]string `json:"display_fields,omitempty"`
-	HighlightFields   *[]string `json:"highlight_fields,omitempty"`
-	AllowedSortFields *[]string `json:"sort_fields,omitempty"`
-	AllowedFacets     *[]string `json:"allowed_facets,omitempty"`
+	Id              *string  `json:"id,omitempty"`
+	Slug            string   `json:"slug,omitempty"`
+	DisplayFields   []string `json:"display_fields,omitempty"`
+	HighlightFields []string `json:"highlight_fields,omitempty"`
+	AllowedFacets   []string `json:"allowed_facets,omitempty"`
 }
 
 func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res *utils.Status, err error) {
 	dbConn := container.GetDb()
-	searchEndpoint := data.SearchEndpoint{
-		Slug:            search.Slug,
-		Index:           index_slug,
-		DisplayFields:   *search.DisplayFields,
-		HighlightFields: *search.HighlightFields,
-		AllowedFacets:   *search.AllowedFacets,
-	}
 
 	var result *gorm.DB
 
 	if search.Id == nil {
-		result = dbConn.Model(&data.SearchEndpoint{}).Create(&searchEndpoint)
+		result = dbConn.Model(&data.SearchEndpoint{}).Create(&data.SearchEndpoint{
+			DisplayFields:   pq.StringArray(search.DisplayFields),
+			HighlightFields: pq.StringArray(search.HighlightFields),
+			AllowedFacets:   pq.StringArray(search.AllowedFacets),
+			Index:           index_slug,
+			Slug:            search.Slug,
+		})
 	} else {
-		result = dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&searchEndpoint)
+		result = dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&data.SearchEndpoint{
+			DisplayFields:   pq.StringArray(search.DisplayFields),
+			HighlightFields: pq.StringArray(search.HighlightFields),
+			AllowedFacets:   pq.StringArray(search.AllowedFacets),
+		})
 	}
 
 	if result.Error != nil {
+		fmt.Println(result.Error)
 		return nil, result.Error
 	}
 
@@ -46,22 +52,30 @@ func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res
 	return response, nil
 }
 
-func GetSearches(index_slug string) (res interface{}) {
+func GetSearches(index_slug string) (res *[]data.SearchEndpoint, err error) {
 	dbConn := container.GetDb()
 
-	var results []data.SearchEndpoint
+	var results *[]data.SearchEndpoint
 
-	dbConn.Model(&data.SearchEndpoint{}).Where("index = ?", index_slug).Find(&results)
+	dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("index = ?", index_slug).Find(&results)
 
-	return results
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
+
+	return results, nil
 }
 
-func GetSearch(index_slug string, search_slug string) (res interface{}) {
+func GetSearch(index_slug string, search_slug string) (res *data.SearchEndpoint, err error) {
 	dbConn := container.GetDb()
 
-	var result data.SearchEndpoint
+	var result *data.SearchEndpoint
 
-	dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(&result)
+	dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("index = ? AND slug = ?", index_slug, search_slug).Find(&result)
 
-	return result
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
+
+	return result, nil
 }

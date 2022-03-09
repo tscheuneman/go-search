@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
@@ -20,9 +21,9 @@ type SearchEndpoint struct {
 	Id              string `gorm:"primaryKey"`
 	Slug            string `gorm:"uniqueIndex"`
 	Index           string
-	DisplayFields   []string `gorm:"type:text[]"`
-	HighlightFields []string `gorm:"type:text[]"`
-	AllowedFacets   []string `gorm:"type:text[]"`
+	DisplayFields   pq.StringArray `gorm:"type:text[]"`
+	HighlightFields pq.StringArray `gorm:"type:text[]"`
+	AllowedFacets   pq.StringArray `gorm:"type:text[]"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }

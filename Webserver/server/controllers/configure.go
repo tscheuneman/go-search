@@ -78,7 +78,11 @@ func ConfigureSearch(w http.ResponseWriter, r *http.Request) {
 func GetSearches(w http.ResponseWriter, r *http.Request) {
 	index_slug := chi.URLParam(r, "index_slug")
 
-	searches := services.GetSearches(index_slug)
+	searches, err := services.GetSearches(index_slug)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+	}
 
 	render.JSON(w, r, searches)
 }
@@ -87,7 +91,11 @@ func GetSearch(w http.ResponseWriter, r *http.Request) {
 	index_slug := chi.URLParam(r, "index_slug")
 	search_slug := chi.URLParam(r, "search_slug")
 
-	search := services.GetSearch(index_slug, search_slug)
+	search, err := services.GetSearch(index_slug, search_slug)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+	}
 
 	render.JSON(w, r, search)
 }
