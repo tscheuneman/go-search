@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import {
     useParams,
@@ -18,6 +19,7 @@ function Index(): React.ReactElement {
     const [displayFields, setDisplayFields] = useState<string[]>([]);
     const [filterableFields, setFilterableFields] = useState<string[]>([]);
     const [sortableFields, setSortableFields] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [searches, setSearches] = useState([]);
 
@@ -62,11 +64,62 @@ function Index(): React.ReactElement {
         }).catch(err => console.error(err));
     };
 
+    const handleFileUpload = (evt: any) => {
+        setLoading(true);
+        const target = evt.target;
+        if(target?.files?.[0]) {
+            const fileReader = new FileReader();
+
+            fileReader.addEventListener("load", () => {
+                const result = fileReader?.result || '';
+                const JsonResult = JSON.parse(result as string);
+                fetch(`/admin/index/${indexId}/document`, { method: "POST", body: JSON.stringify({ documents: JsonResult }), headers: {
+                    'Content-Type': 'application/json'
+                } }).then(res => res.json()).then(response => {
+                    console.log(response);
+                    setLoading(false);
+                }).catch(err => console.error(err));
+            }, false);
+
+            fileReader.readAsText(target?.files?.[0]);
+        }
+    }
+
     return (
         <>
-            <Typography variant="h5" component="div">
-                Configure { indexId }
-            </Typography>
+            <Grid style={{ marginBottom: '20px' }} container spacing={2}>
+                <Grid item xs={6}>
+                    <Typography variant="h5" component="div">
+                        Configure { indexId }
+                    </Typography>
+                </Grid>
+                <Grid style={{
+                    display: 'flex',
+                    justifyContent: 'end'
+                }} 
+                item xs={6}>
+                    {
+                        loading
+                        ?
+                            <CircularProgress size={20} />
+                        :
+                            <Button
+                            variant="contained"
+                            component="label"
+                            >
+                                Upload File
+                                <input
+                                    accept="application/json"
+                                    type="file"
+                                    onChange={handleFileUpload}
+                                    hidden
+                                />
+                            </Button>
+                    }
+
+                </Grid>
+            </Grid>
+
             <hr />
             <Grid style={{ marginBottom: '20px' }} container spacing={2}>
                 <Grid item xs={6}>
