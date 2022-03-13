@@ -15,7 +15,7 @@ func (rs MainRouter) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, "../", "client"))
+	filesDir := http.Dir(filepath.Join(workDir, "../", "client/build"))
 
 	FileServer(r, "/", filesDir)
 
