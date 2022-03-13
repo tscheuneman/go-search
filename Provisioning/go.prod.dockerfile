@@ -11,6 +11,7 @@ COPY ./Webserver/client /app/client
 
 WORKDIR /app/client
 
+RUN npm install
 RUN npm run build
 
 WORKDIR /app/server
