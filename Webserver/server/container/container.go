@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const DEFAULT_USER = "DEFAULT_USER"
+
 const MEILI_URL = "MEILI_URL"
 
 // DB

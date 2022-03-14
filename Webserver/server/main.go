@@ -16,6 +16,7 @@ import (
 	"github.com/tscheuneman/go-search/container"
 	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/routes"
+	"github.com/tscheuneman/go-search/utils"
 )
 
 func main() {
@@ -46,6 +47,9 @@ func main() {
 
 	// DB Migrations should probably live somewhere else.  This is fine for now though
 	dbConn.AutoMigrate(&data.User{}, &data.SearchEndpoint{})
+
+	fmt.Println("Running preprocess tasks")
+	utils.AdminUserPreprocess()
 
 	fmt.Println("Initializing HTTP Server")
 	initHttp()
