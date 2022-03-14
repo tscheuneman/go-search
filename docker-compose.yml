@@ -45,6 +45,8 @@ services:
       - "7700:7700"
     networks:
       - app-network
+    volumes:
+      - meli:/data.ms
 
   # Set up DB
   postgres:
@@ -64,4 +66,6 @@ networks:
       driver: bridge
 volumes:
   db:
+    driver: local
+  meli:
     driver: local
