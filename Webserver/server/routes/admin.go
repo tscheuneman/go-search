@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
 
 	"github.com/tscheuneman/go-search/middleware"
@@ -21,12 +19,12 @@ func (rs AdminRoutes) Routes() chi.Router {
 	r.Mount("/index", IndexRoutes{}.Routes())
 
 	// Auth eventually anyway...
-	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Login Func"))
-	})
-	r.Get("/logout", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Logout Func"))
-	})
+
+	/*
+		r.Get("/logout", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Logout Func"))
+		})
+	*/
 
 	return r
 }
