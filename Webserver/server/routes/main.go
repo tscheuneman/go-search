@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/tscheuneman/go-search/controllers"
 )
 
 type MainRouter struct{}
@@ -21,6 +22,8 @@ func (rs MainRouter) Routes() chi.Router {
 
 	r.Mount("/admin", AdminRoutes{}.Routes())
 	r.Mount("/search", SearchRoutes{}.Routes())
+
+	r.Post("/login", controllers.Login)
 
 	return r
 }
