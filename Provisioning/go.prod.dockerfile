@@ -3,16 +3,7 @@ ENV enviorment = ${ENV}
 
 RUN apk update && apk add git
 
-# TODO: remove this once once we split off the client into a seperate package
-RUN apk add nodejs && apk add npm
-
 COPY ./Webserver/server /app/server
-COPY ./Webserver/client /app/client
-
-WORKDIR /app/client
-
-RUN npm install
-RUN npm run build
 
 WORKDIR /app/server
 
