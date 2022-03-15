@@ -4,7 +4,6 @@ ENV enviorment = ${ENV}
 RUN apk update && apk add git
 
 COPY ./Webserver/server /app/server
-COPY ./Webserver/client /app/client
 
 WORKDIR /app/server
 

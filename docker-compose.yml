@@ -3,7 +3,6 @@ services:
   base_go:
     volumes:
       - ./Webserver/server:/app/server
-      - ./Webserver/client:/app/client
     environment:
       - ENV=DEV
       - MEILI_URL=http://meilisearch:7700
