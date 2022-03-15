@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+
+	"github.com/tscheuneman/go-search/middleware"
 )
 
 type AdminRoutes struct{}
@@ -11,6 +13,7 @@ type AdminRoutes struct{}
 func (rs AdminRoutes) Routes() chi.Router {
 	r := chi.NewRouter()
 
+	r.Use(middleware.JwtMiddleware)
 	// TODO: Soooome kind of auth middleware.
 	// It'll probably be something super basic, probably no roles/ granular permissions
 

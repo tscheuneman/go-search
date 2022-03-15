@@ -8,13 +8,15 @@ import (
 )
 
 const DEFAULT_USER = "DEFAULT_USER"
-
 const MEILI_URL = "MEILI_URL"
 
 // DB
 const DB_HOST = "DB_HOST"
 const DB_USER = "DB_USER"
 const DB_PASSWORD = "DB_PASSWORD"
+
+// Setable Values
+var JWT_KEY = "JWT_KEY"
 
 var dbSingleton sync.Once
 var clientSingleton sync.Once
