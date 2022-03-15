@@ -22,7 +22,8 @@ export const ApiRequest = (path: string, callback: (response: any) => void, opti
         } else {
             switch(res.status) {
                 case 403:
-                    window.location.assign('/login');
+                    EventBus.trigger(EVENTS.NAVIGATE, '/login');
+                    break;
             }
         }
 

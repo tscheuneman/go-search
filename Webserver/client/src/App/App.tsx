@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import {
   BrowserRouter as Router,
@@ -9,10 +9,20 @@ import {
 import Home from '../Pages/Home';
 import Index from '../Pages/Index';
 import Searches from '../Pages/Searches';
+import Login from '../Pages/Login';
+
+import EventBus from '../utils/eventbus';
+import { EVENTS } from '../constants';
 
 import { StyledLink, Container } from './styles';
 
 function App() {
+  useEffect(() => {
+    EventBus.subscribe(EVENTS.NAVIGATE, (path: string) => {
+      window.location.assign(path);
+    });
+  }, []);
+
   return (
     <Router>
       <div className="App">
@@ -29,6 +39,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/index/:id" element={<Index />} />
             <Route path="/index/:id/search/:search_slug" element={<Searches />} />
           </Routes>
