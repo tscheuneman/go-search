@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -13,13 +12,17 @@ import (
 
 func JwtMiddleware(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		authCookie, err := r.Cookie(container.AUTH_HEADER)
+		authCookie, err := r.Cookie(container.AUTH_COOKIE)
 		if err != nil {
 			render.Render(w, r, utils.ErrForbiddenRequest(errors.New("Auth Token Missing")))
 			return
 
 		}
-		fmt.Println(authCookie)
+		validToken := utils.ValidateToken(authCookie.Value)
+		if !validToken {
+			render.Render(w, r, utils.ErrForbiddenRequest(errors.New("Invalid Auth Token")))
+			return
+		}
 
 		next.ServeHTTP(w, r)
 	}
