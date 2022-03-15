@@ -31,6 +31,15 @@ func ErrInvalidRequest(err error) render.Renderer {
 	}
 }
 
+func ErrForbiddenRequest(err error) render.Renderer {
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: 403,
+		StatusText:     "Invalid request.",
+		ErrorText:      err.Error(),
+	}
+}
+
 func HttpError(errorText string, status int) render.Renderer {
 	err := errors.New(errorText)
 	return &ErrResponse{
