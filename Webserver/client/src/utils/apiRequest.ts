@@ -6,14 +6,17 @@ interface ApiOptions {
     method?: ApiMethod,
     body?: any;
     headers?: Record<string, string>;
+    credentials?: RequestCredentials,
 }
 
-const DEFAULT_SETTINGS = {
-    method: 'GET'
+const DEFAULT_SETTINGS: ApiOptions = {
+    method: 'GET',
+    credentials: 'include',
 }
 
 export const ApiRequest = (path: string, callback: (response: any) => void, options?: ApiOptions,) => {
-    fetch(path, { ...DEFAULT_SETTINGS, ...options }).then(res => {
+    const requestOptions = { ...DEFAULT_SETTINGS, ...options };
+    fetch(`${process.env.REACT_APP_URL_ROOT}${path}`, requestOptions).then(res => {
         if(res.status === 200) {
             res.json().then(response => {
                 console.log(response);
