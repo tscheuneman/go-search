@@ -1,6 +1,7 @@
 package container
 
 import (
+	"os"
 	"sync"
 
 	"github.com/meilisearch/meilisearch-go"
@@ -16,7 +17,10 @@ const DB_USER = "DB_USER"
 const DB_PASSWORD = "DB_PASSWORD"
 
 // Setable Values
-var JWT_KEY = "JWT_KEY"
+var JWT_KEY string = "JWT_KEY"
+var CLIENT_ORIGIN string = "localhost"
+
+var IS_DEV bool = os.Getenv("ENV") == "DEV"
 
 var dbSingleton sync.Once
 var clientSingleton sync.Once
