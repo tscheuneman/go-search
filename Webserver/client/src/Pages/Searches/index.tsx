@@ -6,6 +6,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
 import { TextEditor } from '../../Components/TextEditor';
+import { ApiRequest } from '../../utils/apiRequest';
 
 import {
     useParams
@@ -24,7 +25,7 @@ function Searches(): React.ReactElement {
 
 
     useEffect(() => {
-        fetch(`/admin/index/${indexId}/configure/search/${searchSlug}`).then(res => res.json()).then(response => {
+        ApiRequest(`/admin/index/${indexId}/configure/search/${searchSlug}`, (response) => {
             const facetResponse: string[] = response[FieldConfigValues.FACET_CONFIG] || [];
             const displayResponse: string[] = response[FieldConfigValues.DISPLAY_CONFIG] || [];
             const highlightResponse: string[] = response[FieldConfigValues.HIGHLIGHT_CONFIG] || [];
@@ -33,8 +34,7 @@ function Searches(): React.ReactElement {
             setAllowedFacets(facetResponse)
             setDisplayFields(displayResponse);
             setHighlightFields(highlightResponse);
-
-        }).catch(err => console.error(err));
+        });
     }, []);
 
     const setItems = (event: React.ChangeEvent<HTMLTextAreaElement>, mutator: React.Dispatch<React.SetStateAction<any>>) => {
@@ -52,10 +52,14 @@ function Searches(): React.ReactElement {
                 allowed_facets: allowedFacets,
             }
         };
-        fetch(`/admin/index/${indexId}/configure/search`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
-            'Content-Type': 'application/json'
-        } }).then(res => res.json()).then(response => {
-        }).catch(err => console.error(err));
+
+        ApiRequest(`/admin/index/${indexId}/configure/search`, () => {}, {
+            method: 'POST',
+            body: JSON.stringify(saveRequest),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     };
 
     return (

@@ -6,6 +6,9 @@ import Grid from '@mui/material/Grid';
 import {
     Link
   } from "react-router-dom";
+
+import { ApiRequest } from '../../utils/apiRequest';
+
 interface Index {
     uid: string;
     createdAt: string;
@@ -17,9 +20,9 @@ function Home(): React.ReactElement {
     const [indexes, setIndexes] = useState<Index[]>([]);
 
     useEffect(() => {
-        fetch('/admin/index').then(res => res.json()).then(response => {
+        ApiRequest('/admin/index', (response) => {
             setIndexes(response);
-        }).catch(err => console.error(err));
+        });
     }, []);
 
     return (

@@ -14,6 +14,8 @@ import {
 import { ConfigValues } from './types';
 import { TextEditor } from '../../Components/TextEditor';
 
+import { ApiRequest } from '../../utils/apiRequest';
+
 function Index(): React.ReactElement {
     const [searchableFields, setSearchableFields] = useState<string[]>([]);
     const [displayFields, setDisplayFields] = useState<string[]>([]);
@@ -25,7 +27,7 @@ function Index(): React.ReactElement {
 
     const { id: indexId } = useParams();
     useEffect(() => {
-        fetch(`/admin/index/${indexId}/configure/globals`).then(res => res.json()).then(response => {
+        ApiRequest(`/admin/index/${indexId}/configure/globals`, (response) => {
             const searchableResponse: string[] = response[ConfigValues.SEARCH_CONFIG] || ["*"];
             const displayResponse: string[] = response[ConfigValues.DISPLAY_CONFIG] || ["*"];
             const filterableResponse: string[] = response[ConfigValues.FILTERABLE_CONFIG] || [];
@@ -35,12 +37,11 @@ function Index(): React.ReactElement {
             setDisplayFields(displayResponse)
             setFilterableFields(filterableResponse);
             setSortableFields(sortableResponse);
+        });
 
-        }).catch(err => console.error(err));
-
-        fetch(`/admin/index/${indexId}/configure/search`).then(res => res.json()).then(response => {
+        ApiRequest(`/admin/index/${indexId}/configure/search`, (response) => {
             setSearches(response || [])
-            }).catch(err => console.error(err));
+        });
     }, []);
 
     const setItems = (event: React.ChangeEvent<HTMLTextAreaElement>, mutator: React.Dispatch<React.SetStateAction<any>>) => {
@@ -58,10 +59,13 @@ function Index(): React.ReactElement {
             }
         };
 
-        fetch(`/admin/index/${indexId}/configure/globals`, { method: "POST", body: JSON.stringify(saveRequest), headers: {
-            'Content-Type': 'application/json'
-        } }).then(res => res.json()).then(response => {
-        }).catch(err => console.error(err));
+        ApiRequest(`/admin/index/${indexId}/configure/globals`, () => {}, {
+            method: 'POST',
+            body: JSON.stringify(saveRequest),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     };
 
     const handleFileUpload = (evt: any) => {
@@ -73,12 +77,15 @@ function Index(): React.ReactElement {
             fileReader.addEventListener("load", () => {
                 const result = fileReader?.result || '';
                 const JsonResult = JSON.parse(result as string);
-                fetch(`/admin/index/${indexId}/document`, { method: "POST", body: JSON.stringify({ documents: JsonResult }), headers: {
-                    'Content-Type': 'application/json'
-                } }).then(res => res.json()).then(response => {
-                    console.log(response);
+                ApiRequest(`/admin/index/${indexId}/document`, () => {
                     setLoading(false);
-                }).catch(err => console.error(err));
+                }, {
+                    method: 'POST',
+                    body: JSON.stringify({ documents: JsonResult }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
             }, false);
 
             fileReader.readAsText(target?.files?.[0]);
