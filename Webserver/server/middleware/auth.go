@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -18,11 +19,15 @@ func JwtMiddleware(next http.Handler) http.Handler {
 			return
 
 		}
-		validToken := utils.ValidateToken(authCookie.Value)
+		validToken, user_id := utils.ValidateToken(authCookie.Value)
 		if !validToken {
 			render.Render(w, r, utils.ErrForbiddenRequest(errors.New("Invalid Auth Token")))
 			return
 		}
+
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, "UserID", user_id)
+		r = r.WithContext(ctx)
 
 		next.ServeHTTP(w, r)
 	}

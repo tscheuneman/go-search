@@ -21,13 +21,22 @@ func GenerateToken(user string) (string, error) {
 	return tokenString, err
 }
 
-func ValidateToken(jwtToken string) bool {
+func ValidateToken(jwtToken string) (bool, string) {
 	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
 		return []byte(container.JWT_KEY), nil
 	})
 
-	if err == nil && token.Valid {
-		return true
+	claims := token.Claims.(jwt.MapClaims)
+
+	userId := claims["user_id"].(string)
+
+	if userId == "" {
+		return false, ""
 	}
-	return false
+
+	if err == nil && token.Valid {
+		return true, userId
+	}
+
+	return false, ""
 }
