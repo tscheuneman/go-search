@@ -16,9 +16,9 @@ jobs:
       env:
         ENV: PROD
       with:
-        name: docker.pkg.github.com/tscheuneman/go-search/server
+        name: ghcr.io/tscheuneman/go-search/server
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        registry: docker.pkg.github.com
+        registry: ghcr.io
         context: ${{ github.workspace }}
         dockerfile: ${{ github.workspace }}/Provisioning/go.prod.dockerfile
