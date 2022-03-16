@@ -12,7 +12,7 @@ func (rs IndexRoutes) Routes() chi.Router {
 
 	r.Get("/", controllers.GetIndexes)
 	r.Post("/", controllers.CreateIndex)
-	r.Delete("/", controllers.DeleteIndex)
+	r.Delete("/{index_slug}", controllers.DeleteIndex)
 
 	r.Get("/{index_slug}", controllers.GetIndex)
 	// Sub routes for document actions

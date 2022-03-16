@@ -75,13 +75,9 @@ func GetIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteIndex(w http.ResponseWriter, r *http.Request) {
-	data := &IndexCrudRequest{}
-	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, utils.ErrInvalidRequest(err))
-		return
-	}
+	index_id := chi.URLParam(r, "index_slug")
 
-	delete, err := services.DeleteIndex(data.Slug)
+	delete, err := services.DeleteIndex(index_id)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))
