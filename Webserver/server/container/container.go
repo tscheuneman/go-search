@@ -10,6 +10,7 @@ import (
 
 const DEFAULT_USER = "DEFAULT_USER"
 const MEILI_URL = "MEILI_URL"
+const SERVICE_PORT = "SERVICE_PORT"
 
 // DB
 const DB_HOST = "DB_HOST"

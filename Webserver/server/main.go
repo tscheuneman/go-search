@@ -24,8 +24,9 @@ func main() {
 	dbHost := os.Getenv(container.DB_HOST)
 	dbUser := os.Getenv(container.DB_USER)
 	dbPw := os.Getenv(container.DB_PASSWORD)
+	port := os.Getenv(container.SERVICE_PORT)
 
-	if meliUrl == "" || dbHost == "" || dbUser == "" || dbPw == "" {
+	if meliUrl == "" || dbHost == "" || dbUser == "" || dbPw == "" || port == "" {
 		panic("Required Env Variables don't exist")
 	}
 
@@ -51,11 +52,11 @@ func main() {
 	fmt.Println("Running preprocess tasks")
 	utils.AdminUserPreprocess()
 
-	fmt.Println("Initializing HTTP Server")
-	initHttp()
+	fmt.Println("Initializing HTTP Server on port " + port)
+	initHttp(port)
 }
 
-func initHttp() {
+func initHttp(port string) {
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
@@ -72,5 +73,5 @@ func initHttp() {
 
 	r.Mount("/", routes.MainRouter{}.Routes())
 
-	http.ListenAndServe(":80", r)
+	http.ListenAndServe(":"+port, r)
 }

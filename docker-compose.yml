@@ -21,7 +21,7 @@ services:
       - "meilisearch"
       - "postgres"
     ports:
-      - "80:80"
+      - "5000:5000"
     networks:
       - app-network
 
