@@ -55,7 +55,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Domain:   container.CLIENT_ORIGIN,
 	}
 
+	userCookie := http.Cookie{
+		Name:     container.USER_COOKIE,
+		Value:    msg,
+		MaxAge:   259200,
+		HttpOnly: false,
+		Secure:   useSecure,
+		Domain:   container.CLIENT_ORIGIN,
+	}
+
 	http.SetCookie(w, &cookie)
+	http.SetCookie(w, &userCookie)
 
 	render.JSON(w, r, utils.Status{
 		Status:  200,
