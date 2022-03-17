@@ -6,6 +6,7 @@ import (
 	"github.com/meilisearch/meilisearch-go"
 
 	"github.com/tscheuneman/go-search/container"
+	"github.com/tscheuneman/go-search/data"
 )
 
 func CreateIndex(index_slug string) (resp *meilisearch.Task, err error) {
@@ -52,6 +53,13 @@ func GetIndex(index_slug string) (resp *meilisearch.Index, err error) {
 
 func DeleteIndex(index_slug string) (resp *meilisearch.Task, err error) {
 	client := container.GetClient()
+	dbConn := container.GetDb()
+
+	dbResult := dbConn.Where("index = ?", index_slug).Delete(&data.SearchEndpoint{})
+
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
 
 	delete, err := client.DeleteIndex(index_slug)
 
