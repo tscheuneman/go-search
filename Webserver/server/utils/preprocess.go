@@ -19,13 +19,13 @@ func AdminUserPreprocess() {
 		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
 			defaultUser := os.Getenv(container.DEFAULT_USER)
 
+			if defaultUser == "" {
+				defaultUser = "admin"
+			}
+
 			password, err := HashPassword(defaultUser)
 			if err != nil {
 				panic("Could not generate password")
-			}
-
-			if defaultUser == "" {
-				defaultUser = "admin"
 			}
 
 			createResult := dbConn.Model(&data.User{}).Create(&data.User{
