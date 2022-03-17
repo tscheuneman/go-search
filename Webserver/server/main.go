@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -20,15 +19,11 @@ import (
 )
 
 func main() {
-	meliUrl := os.Getenv(container.MEILI_URL)
-	dbHost := os.Getenv(container.DB_HOST)
-	dbUser := os.Getenv(container.DB_USER)
-	dbPw := os.Getenv(container.DB_PASSWORD)
-	port := os.Getenv(container.SERVICE_PORT)
-
-	if meliUrl == "" || dbHost == "" || dbUser == "" || dbPw == "" || port == "" {
-		panic("Required Env Variables don't exist")
-	}
+	meliUrl := utils.GetEnvValueOrDie(container.MEILI_URL)
+	dbHost := utils.GetEnvValueOrDie(container.DB_HOST)
+	dbUser := utils.GetEnvValueOrDie(container.DB_USER)
+	dbPw := utils.GetEnvValueOrDie(container.DB_PASSWORD)
+	port := utils.GetEnvValueOrDie(container.SERVICE_PORT)
 
 	client := meilisearch.NewClient(meilisearch.ClientConfig{
 		Host: meliUrl,

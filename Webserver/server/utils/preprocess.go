@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"os"
 
 	"gorm.io/gorm"
 
@@ -17,11 +16,7 @@ func AdminUserPreprocess() {
 
 	if dbResult.Error != nil {
 		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
-			defaultUser := os.Getenv(container.DEFAULT_USER)
-
-			if defaultUser == "" {
-				defaultUser = "admin"
-			}
+			defaultUser := GetEnvValue(container.DEFAULT_USER, "admin")
 
 			password, err := HashPassword(defaultUser)
 			if err != nil {
