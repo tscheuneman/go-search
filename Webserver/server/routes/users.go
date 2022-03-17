@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/tscheuneman/go-search/controllers"
+	"github.com/tscheuneman/go-search/middleware"
 )
 
 type UserRoutes struct{}
@@ -15,7 +16,12 @@ func (rs UserRoutes) Routes() chi.Router {
 
 	r.Get("/", controllers.AllUsers)
 	r.Post("/", controllers.CreateUser)
-	r.Delete("/{user_id}", controllers.DeleteUser)
+
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.UserOnlyAuthMiddleware)
+		r.Post("/{user_id}/password", controllers.ChangePassword)
+		r.Delete("/{user_id}", controllers.DeleteUser)
+	})
 
 	return r
 }
