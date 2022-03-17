@@ -79,3 +79,15 @@ func GetSearch(search_slug string) (res *data.SearchEndpoint, err error) {
 
 	return result, nil
 }
+
+func DeleteSearch(index_slug string, search_slug string) (res bool, err error) {
+	dbConn := container.GetDb()
+
+	dbResult := dbConn.Where("index = ? AND slug = ?", index_slug, search_slug).Delete(&data.SearchEndpoint{})
+
+	if dbResult.Error != nil {
+		return false, dbResult.Error
+	}
+
+	return true, nil
+}

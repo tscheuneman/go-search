@@ -16,5 +16,6 @@ func (rs ConfigurationRoutes) Routes() chi.Router {
 	r.Post("/search", controllers.ConfigureSearch)
 	r.Get("/search", controllers.GetSearches)
 	r.Get("/search/{search_slug}", controllers.GetSearch)
+	r.Delete("/search/{search_slug}", controllers.DeleteSearch)
 	return r
 }
