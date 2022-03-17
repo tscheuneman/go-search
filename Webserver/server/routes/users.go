@@ -14,6 +14,8 @@ func (rs UserRoutes) Routes() chi.Router {
 	// It'll probably be something super basic, probably no roles/ granular permissions
 
 	r.Get("/", controllers.AllUsers)
+	r.Post("/", controllers.CreateUser)
+	r.Delete("/{user_id}", controllers.DeleteUser)
 
 	return r
 }
