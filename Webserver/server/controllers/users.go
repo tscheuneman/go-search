@@ -19,6 +19,14 @@ func (a *CreateUserStruct) Bind(r *http.Request) error {
 	return nil
 }
 
+type ChangePwStruct struct {
+	Password string `json:"password,omitempty"`
+}
+
+func (a *ChangePwStruct) Bind(r *http.Request) error {
+	return nil
+}
+
 func AllUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := services.GetAllUsers()
 
@@ -51,6 +59,25 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	user_id := chi.URLParam(r, "user_id")
 
 	user, err := services.DeleteUser(user_id)
+
+	if err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	render.JSON(w, r, user)
+}
+
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
+	data := &ChangePwStruct{}
+	if err := render.Bind(r, data); err != nil {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
+
+	user_id := chi.URLParam(r, "user_id")
+
+	user, err := services.ChangePassword(user_id, data.Password)
 
 	if err != nil {
 		render.Render(w, r, utils.ErrInvalidRequest(err))

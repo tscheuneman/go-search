@@ -67,3 +67,27 @@ func DeleteUser(id string) (*utils.Status, error) {
 
 	return statusMessage, nil
 }
+
+func ChangePassword(id string, password string) (*utils.Status, error) {
+	dbConn := container.GetDb()
+
+	hashedPW, err := utils.HashPassword(password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dbResult := dbConn.Model(&data.User{}).Where("id = ?", id).Update("password", hashedPW)
+
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
+
+	statusMessage := &utils.Status{
+		Status:  200,
+		Message: "Password Changes",
+	}
+
+	return statusMessage, nil
+
+}
