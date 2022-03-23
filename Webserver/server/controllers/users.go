@@ -65,6 +65,8 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	utils.DeleteCookies(w)
+
 	render.JSON(w, r, user)
 }
 
@@ -84,5 +86,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	utils.DeleteCookies(w)
 	render.JSON(w, r, user)
 }

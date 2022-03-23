@@ -52,6 +52,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   259200,
 		HttpOnly: true,
 		Secure:   useSecure,
+		Path:     "/",
 		Domain:   container.CLIENT_ORIGIN,
 	}
 
@@ -61,6 +62,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   259200,
 		HttpOnly: false,
 		Secure:   useSecure,
+		Path:     "/",
 		Domain:   container.CLIENT_ORIGIN,
 	}
 
