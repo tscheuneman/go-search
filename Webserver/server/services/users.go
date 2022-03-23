@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/tscheuneman/go-search/container"
 	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/utils"
@@ -53,6 +55,18 @@ func CreateUser(username string, password string) (*utils.Status, error) {
 
 func DeleteUser(id string) (*utils.Status, error) {
 	dbConn := container.GetDb()
+
+	var users []data.User
+
+	getUsers := dbConn.Limit(2).Find(&users)
+
+	if getUsers.Error != nil {
+		return nil, getUsers.Error
+	}
+
+	if getUsers.RowsAffected < 2 {
+		return nil, errors.New("Can't delete the only user")
+	}
 
 	dbResult := dbConn.Where("id = ?", id).Delete(&data.User{})
 
