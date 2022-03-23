@@ -10,6 +10,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=go-search
+      - SERVICE_PORT=5000
     container_name: base_go
     restart: unless-stopped
     build:
