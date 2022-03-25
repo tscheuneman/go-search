@@ -6,7 +6,7 @@ import (
 	"github.com/tscheuneman/go-search/data"
 )
 
-func Search(query string, search *data.SearchEndpoint, limit int64, offset int64) (resp *meilisearch.SearchResponse, err error) {
+func Search(query string, search *data.SearchEndpoint, limit int64, offset int64, FilterConstructor [][]string) (resp *meilisearch.SearchResponse, err error) {
 	client := container.GetClient()
 
 	index, err := client.GetIndex(search.Index)
@@ -23,12 +23,21 @@ func Search(query string, search *data.SearchEndpoint, limit int64, offset int64
 		AllowedFacets = nil
 	}
 
+	var Filters [][]string
+
+	if len(FilterConstructor) > 0 {
+		Filters = FilterConstructor
+	} else {
+		Filters = nil
+	}
+
 	searchRequest := &meilisearch.SearchRequest{
 		AttributesToRetrieve:  search.DisplayFields,
 		AttributesToHighlight: search.HighlightFields,
 		FacetsDistribution:    AllowedFacets,
 		Limit:                 limit,
 		Offset:                offset,
+		Filter:                Filters,
 	}
 
 	results, err := index.Search(query, searchRequest)
