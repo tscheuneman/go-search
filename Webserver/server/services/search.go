@@ -15,9 +15,18 @@ func Search(query string, search *data.SearchEndpoint, limit int64, offset int64
 		return nil, err
 	}
 
+	var AllowedFacets []string
+
+	if search.AllowedFacets != nil && len(search.AllowedFacets) > 0 && search.AllowedFacets[0] != "" {
+		AllowedFacets = search.AllowedFacets
+	} else {
+		AllowedFacets = nil
+	}
+
 	searchRequest := &meilisearch.SearchRequest{
 		AttributesToRetrieve:  search.DisplayFields,
 		AttributesToHighlight: search.HighlightFields,
+		FacetsDistribution:    AllowedFacets,
 		Limit:                 limit,
 		Offset:                offset,
 	}
