@@ -20,20 +20,15 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 	search, err := services.GetSearch(search_slug)
 
-	var FilterConstructor [][]string
+	var FilterConstructor []string
 
 	for i := 0; i < len(search.AllowedFacets); i++ {
 		searchParam := r.URL.Query().Get(search.AllowedFacets[i])
 		if searchParam != "" {
 			split := strings.Split(searchParam, ",")
-			var searchFilter []string
 
 			for x := 0; x < len(split); x++ {
-				searchFilter = append(searchFilter, search.AllowedFacets[i]+" = "+split[x])
-			}
-
-			if len(searchFilter) > 0 {
-				FilterConstructor = append(FilterConstructor, searchFilter)
+				FilterConstructor = append(FilterConstructor, search.AllowedFacets[i]+" = "+split[x])
 			}
 		}
 	}
