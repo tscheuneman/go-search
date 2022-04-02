@@ -28,6 +28,15 @@ type SearchEndpoint struct {
 	UpdatedAt       time.Time
 }
 
+type SearchKeys struct {
+	gorm.Model
+	Id             string `gorm:"primaryKey"`
+	SearchEndpoint SearchEndpoint
+	Key            string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+}
+
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 	user.Id = uuid.NewString()
 	return
