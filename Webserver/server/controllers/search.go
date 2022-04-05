@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 
+	"github.com/tscheuneman/go-search/data"
 	"github.com/tscheuneman/go-search/services"
 	"github.com/tscheuneman/go-search/utils"
 )
@@ -18,7 +19,14 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	limit := utils.QueryParamToInt64(r, "limit", 20)
 	offset := utils.QueryParamToInt64(r, "offset", 0)
 
-	search, err := services.GetSearch(search_slug)
+	searchInterface, err := services.GetSearch(search_slug)
+
+	search, ok := searchInterface.(*data.SearchEndpoint)
+
+	if !ok {
+		render.Render(w, r, utils.ErrInvalidRequest(err))
+		return
+	}
 
 	var FilterConstructor []string
 

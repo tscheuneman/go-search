@@ -66,15 +66,24 @@ func GetSearches(index_slug string) (res *[]data.SearchEndpoint, err error) {
 	return results, nil
 }
 
-func GetSearch(search_slug string) (res *data.SearchEndpoint, err error) {
+func GetSearch(search_slug string) (res interface{}, err error) {
 	dbConn := container.GetDb()
+	cacheClient := container.GetCacheClient()
 
-	var result *data.SearchEndpoint
+	result, err := cacheClient.Resolve("search_"+search_slug, func() (interface{}, error) {
+		var result *data.SearchEndpoint
 
-	dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("slug = ?", search_slug).Find(&result)
+		dbResult := dbConn.Model(&data.SearchEndpoint{}).Where("slug = ?", search_slug).Find(&result)
 
-	if dbResult.Error != nil {
-		return nil, dbResult.Error
+		if dbResult.Error != nil {
+			return nil, dbResult.Error
+		}
+
+		return result, nil
+	})
+
+	if err != nil {
+		return nil, err
 	}
 
 	return result, nil
