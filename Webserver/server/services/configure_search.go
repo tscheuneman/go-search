@@ -20,6 +20,7 @@ type ConfigureSearchRequest struct {
 
 func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res *utils.Status, err error) {
 	dbConn := container.GetDb()
+	cacheClient := container.GetCacheClient()
 
 	var result *gorm.DB
 
@@ -43,6 +44,8 @@ func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res
 		fmt.Println(result.Error)
 		return nil, result.Error
 	}
+
+	cacheClient.RemoveCacheItem("search_" + search.Slug)
 
 	response := &utils.Status{
 		Status:  200,
