@@ -29,6 +29,8 @@ func main() {
 		Host: meliUrl,
 	})
 
+	container.CLIENT_ORIGIN = utils.GetEnvValue(container.CLIENT_ORIGIN_ENV, "localhost")
+
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPw
 
 	dbConn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

@@ -16,10 +16,11 @@ const SERVICE_PORT = "SERVICE_PORT"
 const DB_HOST = "DB_HOST"
 const DB_USER = "DB_USER"
 const DB_PASSWORD = "DB_PASSWORD"
+const CLIENT_ORIGIN_ENV = "CLIENT_ORIGIN_ENV"
 
 // Setable Values
 var JWT_KEY string = "JWT_KEY"
-var CLIENT_ORIGIN string = "localhost"
+var CLIENT_ORIGIN string
 
 var IS_DEV bool = os.Getenv("ENV") == "DEV"
 
