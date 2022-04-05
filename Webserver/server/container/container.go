@@ -4,7 +4,10 @@ import (
 	"os"
 	"sync"
 
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/meilisearch/meilisearch-go"
+
+	"github.com/tscheuneman/go-search/implementor"
 	"gorm.io/gorm"
 )
 
@@ -26,9 +29,11 @@ var IS_DEV bool = os.Getenv("ENV") == "DEV"
 
 var dbSingleton sync.Once
 var clientSingleton sync.Once
+var cacheClientSingleton sync.Once
 
 var clientConnection *meilisearch.Client
 var dbConnection *gorm.DB
+var cacheClient *implementor.CacheClient
 
 func SetDb(dbCon *gorm.DB) {
 	dbSingleton.Do(func() {
@@ -48,4 +53,22 @@ func SetClient(clientCon *meilisearch.Client) {
 
 func GetClient() *meilisearch.Client {
 	return clientConnection
+}
+
+func SetCacheClient() {
+	cacheClientSingleton.Do(func() {
+		client, err := lru.New(50)
+
+		if err != nil {
+			panic("Couldn't initalize cache")
+		}
+		cacheClient = &implementor.CacheClient{
+			Client: client,
+			Ttl:    3600,
+		}
+	})
+}
+
+func GetCacheClient() *implementor.CacheClient {
+	return cacheClient
 }
