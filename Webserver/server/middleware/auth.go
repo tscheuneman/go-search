@@ -15,8 +15,6 @@ import (
 
 func JwtMiddleware(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		next.ServeHTTP(w, r)
-
 		authCookie, err := r.Cookie(container.AUTH_COOKIE)
 		if err != nil {
 			render.Render(w, r, utils.ErrForbiddenRequest(errors.New("Auth Token Missing")))
