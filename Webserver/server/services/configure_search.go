@@ -11,11 +11,12 @@ import (
 )
 
 type ConfigureSearchRequest struct {
-	Id              *string  `json:"id,omitempty"`
-	Slug            string   `json:"slug,omitempty"`
-	DisplayFields   []string `json:"display_fields,omitempty"`
-	HighlightFields []string `json:"highlight_fields,omitempty"`
-	AllowedFacets   []string `json:"allowed_facets,omitempty"`
+	Id                *string  `json:"id,omitempty"`
+	Slug              string   `json:"slug,omitempty"`
+	DisplayFields     []string `json:"display_fields,omitempty"`
+	HighlightFields   []string `json:"highlight_fields,omitempty"`
+	CombinationFacets []string `json:"combination_facets,omitempty"`
+	AllowedFacets     []string `json:"allowed_facets,omitempty"`
 }
 
 func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res *utils.Status, err error) {
@@ -26,17 +27,19 @@ func CreateSearchEndpoint(index_slug string, search ConfigureSearchRequest) (res
 
 	if search.Id == nil {
 		result = dbConn.Model(&data.SearchEndpoint{}).Create(&data.SearchEndpoint{
-			DisplayFields:   pq.StringArray(search.DisplayFields),
-			HighlightFields: pq.StringArray(search.HighlightFields),
-			AllowedFacets:   pq.StringArray(search.AllowedFacets),
-			Index:           index_slug,
-			Slug:            search.Slug,
+			DisplayFields:     pq.StringArray(search.DisplayFields),
+			HighlightFields:   pq.StringArray(search.HighlightFields),
+			AllowedFacets:     pq.StringArray(search.AllowedFacets),
+			CombinationFacets: pq.StringArray(search.CombinationFacets),
+			Index:             index_slug,
+			Slug:              search.Slug,
 		})
 	} else {
 		result = dbConn.Model(&data.SearchEndpoint{}).Where("id = ?", search.Id).Updates(&data.SearchEndpoint{
-			DisplayFields:   pq.StringArray(search.DisplayFields),
-			HighlightFields: pq.StringArray(search.HighlightFields),
-			AllowedFacets:   pq.StringArray(search.AllowedFacets),
+			DisplayFields:     pq.StringArray(search.DisplayFields),
+			HighlightFields:   pq.StringArray(search.HighlightFields),
+			AllowedFacets:     pq.StringArray(search.AllowedFacets),
+			CombinationFacets: pq.StringArray(search.CombinationFacets),
 		})
 	}
 

@@ -18,14 +18,15 @@ type User struct {
 
 type SearchEndpoint struct {
 	gorm.Model
-	Id              string `gorm:"primaryKey"`
-	Slug            string `gorm:"uniqueIndex"`
-	Index           string
-	DisplayFields   pq.StringArray `gorm:"type:text[]"`
-	HighlightFields pq.StringArray `gorm:"type:text[]"`
-	AllowedFacets   pq.StringArray `gorm:"type:text[]"`
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	Id                string `gorm:"primaryKey"`
+	Slug              string `gorm:"uniqueIndex"`
+	Index             string
+	DisplayFields     pq.StringArray `gorm:"type:text[]"`
+	HighlightFields   pq.StringArray `gorm:"type:text[]"`
+	AllowedFacets     pq.StringArray `gorm:"type:text[]"`
+	CombinationFacets pq.StringArray `gorm:"type:text[]"`
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
 
 type SearchKeys struct {
