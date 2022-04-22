@@ -12,6 +12,9 @@ import (
 func AdminUserPreprocess() {
 	dbConn := container.GetDb()
 
+	// TODO: Remove this
+	dbConn.AutoMigrate(&data.User{}, &data.SearchEndpoint{}, &data.AdminTokens{})
+
 	dbResult := dbConn.Select("username, id").First(&data.User{})
 
 	if dbResult.Error != nil {

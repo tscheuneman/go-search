@@ -29,13 +29,12 @@ type SearchEndpoint struct {
 	UpdatedAt         time.Time
 }
 
-type SearchKeys struct {
+type AdminTokens struct {
 	gorm.Model
-	Id             string `gorm:"primaryKey"`
-	SearchEndpoint SearchEndpoint
-	Key            string
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	Id        string `gorm:"primaryKey"`
+	Name      string
+	Token     string
+	CreatedAt time.Time
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
@@ -45,5 +44,10 @@ func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 
 func (searchEndpoint *SearchEndpoint) BeforeCreate(tx *gorm.DB) (err error) {
 	searchEndpoint.Id = uuid.NewString()
+	return
+}
+
+func (adminToken *AdminTokens) BeforeCreate(tx *gorm.DB) (err error) {
+	adminToken.Id = uuid.NewString()
 	return
 }

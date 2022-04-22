@@ -17,5 +17,7 @@ func (rs AdminRoutes) Routes() chi.Router {
 	r.Mount("/index", IndexRoutes{}.Routes())
 	r.Mount("/users", UserRoutes{}.Routes())
 
+	r.Mount("/token", TokenRoutes{}.Routes())
+
 	return r
 }
