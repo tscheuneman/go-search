@@ -20,9 +20,10 @@ const DB_HOST = "DB_HOST"
 const DB_USER = "DB_USER"
 const DB_PASSWORD = "DB_PASSWORD"
 const CLIENT_ORIGIN_ENV = "CLIENT_ORIGIN_ENV"
+const JWT_KEY_ENV = "JWT_KEY"
 
 // Setable Values
-var JWT_KEY string = "JWT_KEY"
+var JWT_KEY string
 var CLIENT_ORIGIN string
 
 var IS_DEV bool = os.Getenv("ENV") == "DEV"

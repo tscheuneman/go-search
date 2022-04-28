@@ -30,6 +30,7 @@ func main() {
 	})
 
 	container.CLIENT_ORIGIN = utils.GetEnvValue(container.CLIENT_ORIGIN_ENV, "localhost")
+	container.JWT_KEY = utils.GetEnvValue(container.JWT_KEY_ENV, container.JWT_KEY_ENV)
 
 	dsn := "host=" + dbHost + " user=" + dbUser + " password=" + dbPw
 
