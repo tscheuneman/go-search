@@ -41,15 +41,15 @@ func Search(w http.ResponseWriter, r *http.Request) {
 			for x := 0; x < len(split); x++ {
 				if !utils.ArrayContains(search.CombinationFacets, currentFacet) {
 					if searchString == "" {
-						searchString = currentFacet + " = " + split[x]
+						searchString = currentFacet + " = '" + split[x] + "'"
 					} else {
-						searchString = searchString + " AND " + currentFacet + " = " + split[x]
+						searchString = searchString + " AND " + currentFacet + " = '" + split[x] + "'"
 					}
 				} else {
 					if searchString == "" {
-						searchString = currentFacet + " = " + split[x]
+						searchString = currentFacet + " = '" + split[x] + "'"
 					} else {
-						searchString = searchString + " OR " + currentFacet + " = " + split[x]
+						searchString = searchString + " OR " + currentFacet + " = '" + split[x] + "'"
 					}
 				}
 			}
